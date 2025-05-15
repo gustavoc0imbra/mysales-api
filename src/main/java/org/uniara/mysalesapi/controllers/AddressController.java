@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class AddressController {
     @Autowired
     private ViaCepService viaCepService;
