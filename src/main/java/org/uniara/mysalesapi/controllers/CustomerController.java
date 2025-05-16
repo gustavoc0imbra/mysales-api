@@ -32,12 +32,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.save(customer));
     }
 
-    @GetMapping(Constant.API_CUSTOMERS + "{id}")
+    @GetMapping(Constant.API_CUSTOMERS + "/{id}")
     public ResponseEntity<Optional<Customer>> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(customerService.findById(id));
     }
 
-    @DeleteMapping(Constant.API_CUSTOMERS + "{id}")
+    @DeleteMapping(Constant.API_CUSTOMERS + "/{id}")
     public ResponseEntity<Customer> deleteById(@PathVariable("id") Long id) {
         customerService.deleteById(id);
         return ResponseEntity.noContent().build();
