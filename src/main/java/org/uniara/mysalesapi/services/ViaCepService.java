@@ -31,23 +31,16 @@ public class ViaCepService {
                     .GET()
                     .build();
 
-            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .thenAccept((body) -> {
-                        ObjectMapper objectMapper = new ObjectMapper();
+            String respBody =  client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
-                        try {
-                            Map<String, String> map = objectMapper.readValue(body, Map.class);
-                            addressDTO = new ResponseViaCepAddressDTO(
-                                    map.get("cep").replace("-", ""),
-                                    map.get("logradouro"),
-                                    map.get("bairro"),
-                                    map.get("localidade")
-                            );
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+            Map<String, String> json = convertJson(respBody);
+
+            addressDTO = new ResponseViaCepAddressDTO(
+                json.get("cep").replace("-", ""),
+                json.get("logradouro"),
+                json.get("bairro"),
+                json.get("localidade")
+            );
 
             return this.addressDTO;
         }catch (Exception e) {
@@ -67,5 +60,16 @@ public class ViaCepService {
         }
 
         return cep;
+    }
+
+    public Map<String, String> convertJson(String body) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.readValue(body, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
