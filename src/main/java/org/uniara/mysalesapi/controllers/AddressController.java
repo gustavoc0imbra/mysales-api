@@ -64,7 +64,7 @@ public class AddressController {
     }
 
     @PutMapping(Constant.API_CUSTOMERS_ADDRESSES)
-    public ResponseEntity<Address> update(@PathVariable("customerId") Long customerId, @RequestBody UpdateAddressDTO dto) {
+    public ResponseEntity<ResponseAddressDTO> update(@PathVariable("customerId") Long customerId, @RequestBody UpdateAddressDTO dto) {
         if (customerService.findById(customerId).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
@@ -81,7 +81,11 @@ public class AddressController {
         address.get().setAddressNumber(dto.getAddressNumber());
         address.get().setNeighborhood(dto.getNeighborhood());
 
-        return ResponseEntity.ok(addressService.save(address.get()));
+        Address update = addressService.save(address.get());
+
+        ResponseAddressDTO response = new ResponseAddressDTO(update.getId(), update.getCustomer().getId(), update.getDescription(), update.getZipCode(), update.getStreet(), update.getAddressNumber(), update.getNeighborhood(), update.getCity());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(Constant.API_CUSTOMERS_ADDRESSES + "/{addressId}")
