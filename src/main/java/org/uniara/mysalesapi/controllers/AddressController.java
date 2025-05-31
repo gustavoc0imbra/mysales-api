@@ -74,8 +74,6 @@ public class AddressController {
         if (address.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found");
         }
-
-        System.out.println(dto.toString());
         
         address.get().setId(address.get().getId());
         address.get().setCustomer(address.get().getCustomer());
