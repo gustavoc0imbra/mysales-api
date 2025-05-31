@@ -75,15 +75,20 @@ public class AddressController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found");
         }
 
+        System.out.println(dto.toString());
+        
+        address.get().setId(address.get().getId());
+        address.get().setCustomer(address.get().getCustomer());
         address.get().setDescription(dto.getDescription());
         address.get().setZipCode(dto.getZipCode());
+        address.get().setCity(dto.getCity());
         address.get().setStreet(dto.getStreet());
         address.get().setAddressNumber(dto.getAddressNumber());
         address.get().setNeighborhood(dto.getNeighborhood());
 
         Address update = addressService.save(address.get());
 
-        ResponseAddressDTO response = new ResponseAddressDTO(update.getId(), update.getCustomer().getId(), update.getDescription(), update.getZipCode(), update.getStreet(), update.getAddressNumber(), update.getNeighborhood(), update.getCity());
+        ResponseAddressDTO response = new ResponseAddressDTO(update.getId(), update.getCustomer().getId(), address.get().getDescription(), address.get().getZipCode(), address.get().getStreet(), address.get().getAddressNumber(), address.get().getNeighborhood(), address.get().getCity());
 
         return ResponseEntity.ok(response);
     }
